@@ -32,7 +32,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_NAME, campaignId));
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
-            await sqlConnection.OpenAsync();
             SqlDataReader reader = await command.ExecuteReaderAsync();
             
             return await reader.GetCampaignModelAsync();
@@ -49,7 +48,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
 
-            await sqlConnection.OpenAsync();
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
             return await reader.GetCampaignModelsAsync();
@@ -67,7 +65,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
-            await sqlConnection.OpenAsync();
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
             return await reader.GetCampaignModelAsync();
@@ -92,7 +89,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, campaignId));
 
-            await sqlConnection.OpenAsync();
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
             return;
@@ -111,7 +107,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, mapId));
 
-            await sqlConnection.OpenAsync();
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
             // Read results.
@@ -123,12 +118,13 @@ namespace MapBanana.API.ICampaignDatabase
             const string COMMAND_NAME = "DeleteMap";
 
             using SqlConnection sqlConnection = new SqlConnection(ApiConfiguration.DatabaseConnectionString);
+            await sqlConnection.OpenAsync();
+
             using SqlCommand command = new SqlCommand(COMMAND_NAME, sqlConnection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, mapId));
 
-            await sqlConnection.OpenAsync();
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
             return;
@@ -149,7 +145,38 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_IMAGE_URL, map.ImageUrl));
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_IMAGE_URL, map.ImageSmallUrl));
 
+            SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            // Read results.
+            return await reader.GetMapResponseModelAsync();
+        }
+        public async Task SetCampaignActiveMap(string userId, Guid campaignId, Guid mapId)
+        {
+            const string COMMAND_NAME = "SetCampaignActiveMap";
+
+            using SqlConnection sqlConnection = new SqlConnection(ApiConfiguration.DatabaseConnectionString);
             await sqlConnection.OpenAsync();
+
+            using SqlCommand command = new SqlCommand(COMMAND_NAME, sqlConnection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
+            command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
+            command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, mapId));
+
+            SqlDataReader reader = await command.ExecuteReaderAsync();
+        }
+
+        public async Task<MapResponseModel> GetCampaignActiveMap(string userId, Guid campaignId)
+        {
+            const string COMMAND_NAME = "GetCampaignActiveMap";
+
+            using SqlConnection sqlConnection = new SqlConnection(ApiConfiguration.DatabaseConnectionString);
+            await sqlConnection.OpenAsync();
+
+            using SqlCommand command = new SqlCommand(COMMAND_NAME, sqlConnection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
+
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
             // Read results.
@@ -167,7 +194,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
-            await sqlConnection.OpenAsync();
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
             // Read results.
@@ -184,7 +210,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, campaignId));
 
-            await sqlConnection.OpenAsync();
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
             return;
@@ -203,7 +228,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
-            await sqlConnection.OpenAsync();
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
             // Read results.
@@ -223,7 +247,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, mapId));
 
-            await sqlConnection.OpenAsync();
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
             // Read results.
