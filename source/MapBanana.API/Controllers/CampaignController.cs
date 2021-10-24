@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using MapBanana.Api.Models;
+using MapBanana.API.Storage;
 using MapBanana.Core.Events;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,14 @@ namespace MapBanana.Api.Controllers
     [Route("api/[controller]")]
     public class CampaignController : Controller
     {
+        private ICampaignStorage CampaignStorage { get; }
         private HubConnection HubConnection { get; }
 
-        public CampaignController(HubConnection hubConnection)
+        public CampaignController(
+            HubConnection hubConnection,
+            ICampaignStorage campaignStorage)
         {
+            CampaignStorage = campaignStorage;
             HubConnection = hubConnection;
         }
 
@@ -89,13 +94,21 @@ namespace MapBanana.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Gets all maps in the campaign.
+        /// </summary>
+        /// <param name="campaignId"></param>
+        /// <returns>List of maps.</returns>
         [HttpGet]
         [Route("{campaignId}/[action]")]
+        [ProducesResponseType(typeof(MapModel), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> Maps([FromRoute] Guid campaignId)
         {
             await Task.Yield();
 
-            return Ok(new List<MapModel>());
+            return Ok(new List<MapResponseModel>());
         }
 
         /// <summary>
@@ -108,11 +121,11 @@ namespace MapBanana.Api.Controllers
         [ProducesResponseType(typeof(MapModel), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> Map([FromRoute] Guid campaignId)
+        public async Task<IActionResult> Map([FromRoute] Guid campaignId, [FromBody] MapRequestModel mapRequest)
         {
             await Task.Yield();
 
-            return Ok();
+            return Ok(new MapResponseModel());
         }
         
         /// <summary>
@@ -124,9 +137,10 @@ namespace MapBanana.Api.Controllers
         [Route("{campaignId}/[action]")]
         public async Task<IActionResult> ActiveMap([FromRoute] Guid campaignId)
         {
+
             await Task.Yield();
 
-            return Ok(new MapModel());
+            return Ok(new MapResponseModel());
         }
 
         /// <summary>
@@ -142,7 +156,7 @@ namespace MapBanana.Api.Controllers
             // Notify listeners that a map has been activated.
             await HubConnection.SendAsync(CampaignEvent.MapActive);
 
-            return Ok();
+            return Ok(new MapResponseModel());
         }
     }
 }

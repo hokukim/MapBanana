@@ -18,5 +18,6 @@ namespace MapBanana.Api.Configuration
         // Data and storage.
         public string DatabaseConnectionString { get; set; }
         public string StorageConnectionString { get; set; }
+        public string StorageCampaignRootName { get; set; }
     }
 }

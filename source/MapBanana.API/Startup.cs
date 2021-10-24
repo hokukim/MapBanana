@@ -1,5 +1,8 @@
+using Azure.Storage.Blobs;
 using MapBanana.Api.Configuration;
 using MapBanana.API.AuthorizationRequirements;
+using MapBanana.API.ICampaignDatabase;
+using MapBanana.API.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -106,9 +109,18 @@ namespace MapBanana.Api
                 .WithUrl(ApiConfiguration.EventHubCampaignUrl)
                 .WithAutomaticReconnect(ApiConfiguration.EventHubReconnectDelays)
                 .Build();
-            hubConnection.StartAsync().Wait();
 
+            hubConnection.StartAsync().Wait();
             services.AddSingleton(hubConnection);
+
+            // Storage account.
+            BlobContainerClient blobContainerClient = new BlobContainerClient(ApiConfiguration.StorageConnectionString, ApiConfiguration.StorageCampaignRootName);
+            ICampaignStorage storage = new AzureBlobCampaignStorage(blobContainerClient);
+            services.AddSingleton(storage);
+
+            // Database.
+            ICampaignDatabase db = new AzureSqlCampaignDatabase();
+            services.AddSingleton(db);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
