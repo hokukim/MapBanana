@@ -10,6 +10,11 @@ namespace MapBanana.API.Extensions
     {
         public static Task<CampaignModel> GetCampaignModelAsync(this SqlDataReader reader)
         {
+            if (!reader.HasRows)
+            {
+                return null;
+            }
+
             return Task.FromResult(new CampaignModel()
             {
                 Id = (Guid)reader[nameof(CampaignModel.Id)],
@@ -40,6 +45,11 @@ namespace MapBanana.API.Extensions
 
         public static Task<MapResponseModel> GetMapResponseModelAsync(this SqlDataReader reader)
         {
+            if (!reader.HasRows)
+            {
+                return null;
+            }
+
             return Task.FromResult(new MapResponseModel()
             {
                 Id = (Guid)reader[nameof(MapResponseModel.Id)],

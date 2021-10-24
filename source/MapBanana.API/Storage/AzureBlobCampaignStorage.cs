@@ -26,12 +26,12 @@ namespace MapBanana.API.Storage
             };
 
             // Image URL.
-            string imageUrl = GetImageUrl(campaignId, mapId);
+            string imageUrl = GetMapUrl(campaignId, mapId);
             BlobClient blobClient = BlobContainerClient.GetBlobClient(imageUrl);
             mapResponseModel.ImageUrl = blobClient.Uri.ToString();
 
             // Image small URL.
-            string imageSmallUrl = GetImageUrl(campaignId, mapId, true);
+            string imageSmallUrl = GetMapUrl(campaignId, mapId, true);
             BlobClient blobClientSmall = BlobContainerClient.GetBlobClient(imageSmallUrl);
             mapResponseModel.ImageSmallUrl = blobClientSmall.Uri.ToString();
 
@@ -41,16 +41,13 @@ namespace MapBanana.API.Storage
         public async Task<MapResponseModel> SetMapAsync(Guid campaignId, Guid mapId, Stream dataStream)
         {
             // Upload.
-            string imageUrl = GetImageUrl(campaignId, mapId);
-            string imageSmallUrl = GetImageUrl(campaignId, mapId, true);
+            string imageUrl = GetMapUrl(campaignId, mapId);
+            string imageSmallUrl = GetMapUrl(campaignId, mapId, true);
 
-            List<Task> uploadTasks = new List<Task>()
-            {
+            await Task.WhenAll(
                 BlobContainerClient.UploadBlobAsync(imageUrl, dataStream),
                 BlobContainerClient.UploadBlobAsync(imageSmallUrl, dataStream)
-            };
-
-            await Task.WhenAll(uploadTasks);
+            );
 
             // Build model.
             BlobClient blobClient = BlobContainerClient.GetBlobClient(imageUrl);
@@ -69,22 +66,27 @@ namespace MapBanana.API.Storage
 
         public async Task DeleteMapAsync(Guid campaignId, Guid mapId)
         {
-            string imageUrl = GetImageUrl(campaignId, mapId, true);
-            string imageSmallUrl = GetImageUrl(campaignId, mapId, true);
+            string imageUrl = GetMapUrl(campaignId, mapId, true);
+            string imageSmallUrl = GetMapUrl(campaignId, mapId, true);
 
-            List<Task> tasks = new List<Task>()
-            {
+            await Task.WhenAll(
                 BlobContainerClient.DeleteBlobAsync(imageUrl),
                 BlobContainerClient.DeleteBlobAsync(imageSmallUrl)
-            };
-
-            await Task.WhenAll(tasks);
+            );
         }
 
-        private string GetImageUrl(Guid campaignId, Guid mapId, bool small = false)
+        public async Task DeleteCampaignAsync(Guid campaignId)
         {
+            string campaignUrl = GetCampaignUrl(campaignId);
+            await BlobContainerClient.DeleteBlobAsync(campaignUrl);
+        }
+
+        private string GetMapUrl(Guid campaignId, Guid mapId, bool small = false)
+        {
+            string campaignUrl = GetCampaignUrl(campaignId);
+
             StringBuilder builder = new StringBuilder();
-            builder.Append($"{campaignId}/maps/{mapId}");
+            builder.Append($"{campaignUrl}/maps/{mapId}");
 
             if (small)
             {
@@ -92,6 +94,11 @@ namespace MapBanana.API.Storage
             }
 
             return builder.ToString();
+        }
+
+        private string GetCampaignUrl(Guid campaignId)
+        {
+            return campaignId.ToString();
         }
     }
 }

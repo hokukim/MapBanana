@@ -10,5 +10,6 @@ namespace MapBanana.API.Storage
         Task<MapResponseModel> GetMapAsync(Guid campaignId, Guid mapId);
         Task<MapResponseModel> SetMapAsync(Guid campaignId, Guid mapId, Stream fileStream);
         Task DeleteMapAsync(Guid campaignId, Guid mapId);
+        Task DeleteCampaignAsync(Guid campaignId);
     }
 }

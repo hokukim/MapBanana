@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using MapBanana.Api.Configuration;
@@ -71,19 +72,25 @@ namespace MapBanana.Api.Controllers
                 return BadRequest($"Campaign ID cannot be empty.");
             }
 
-            return await Task.FromResult(Ok(new CampaignModel()
+            string userId = User.GetBananaId(ApiConfiguration);
+
+            CampaignModel campaign = await CampaignDatabase.GetCampaignAsync(userId, campaignId);
+
+            if (campaign == null)
             {
-                Id = campaignId
-            }));
+                return NotFound();
+            }
+
+            return Ok(campaign);
         }
 
         [HttpGet]
         [Route("[action]")]
         public async Task<IActionResult> Campaigns()
         {
-            List<CampaignModel> campaigns = new List<CampaignModel>();
+            string userId = User.GetBananaId(ApiConfiguration);
 
-            await Task.Yield();
+            List<CampaignModel> campaigns = await CampaignDatabase.GetCampaignsAsync(userId);
 
             return Ok(campaigns);
         }
@@ -97,7 +104,12 @@ namespace MapBanana.Api.Controllers
                 return BadRequest($"Campaign ID cannot be empty.");
             }
 
-            await Task.Yield();
+            string userId = User.GetBananaId(ApiConfiguration);
+
+            await Task.WhenAll(
+                CampaignDatabase.DeleteCampaignMapsAsync(userId, campaignId),
+                CampaignStorage.DeleteCampaignAsync(campaignId)
+            );
 
             return Ok();
         }
@@ -131,9 +143,19 @@ namespace MapBanana.Api.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> Map([FromRoute] Guid campaignId, [FromBody] MapRequestModel mapRequest)
         {
-            await Task.Yield();
+            string userId = User.GetBananaId(ApiConfiguration);
+            Guid mapId = Guid.NewGuid();
 
-            return Ok(new MapResponseModel());
+            // Storage.
+            using Stream stream = new MemoryStream();
+            await mapRequest.FormFile.CopyToAsync(stream);
+            MapResponseModel mapResponseModel = await CampaignStorage.SetMapAsync(campaignId, mapId, stream);
+            mapResponseModel.Name = mapRequest.Name;
+
+            // Database.
+            await CampaignDatabase.AddCampaignMapAsync(userId, mapResponseModel);
+
+            return Ok(mapResponseModel);
         }
         
         /// <summary>
