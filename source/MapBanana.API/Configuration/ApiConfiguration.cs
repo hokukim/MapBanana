@@ -5,6 +5,7 @@ namespace MapBanana.Api.Configuration
     public class ApiConfiguration
     {
         public bool IsLocalhost { get; set; }
+        public string LocalUserEmail { get; set; }
 
         // Authentication.
         public string AuthenticationDomain { get; set; }

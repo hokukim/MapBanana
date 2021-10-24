@@ -115,12 +115,11 @@ namespace MapBanana.Api
 
             // Storage account.
             BlobContainerClient blobContainerClient = new BlobContainerClient(ApiConfiguration.StorageConnectionString, ApiConfiguration.StorageCampaignRootName);
-            ICampaignStorage storage = new AzureBlobCampaignStorage(blobContainerClient);
-            services.AddSingleton(storage);
+            services.AddSingleton(blobContainerClient);
+            services.AddSingleton<ICampaignStorage, AzureBlobCampaignStorage>();
 
             // Database.
-            ICampaignDatabase db = new AzureSqlCampaignDatabase();
-            services.AddSingleton(db);
+            services.AddSingleton<ICampaignDatabase, AzureSqlCampaignDatabase>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

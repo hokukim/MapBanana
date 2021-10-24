@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using MapBanana.Api.Configuration;
 using MapBanana.Api.Models;
+using MapBanana.API.Extensions;
+using MapBanana.API.ICampaignDatabase;
 using MapBanana.API.Storage;
 using MapBanana.Core.Events;
 using Microsoft.AspNetCore.Authorization;
@@ -16,15 +19,21 @@ namespace MapBanana.Api.Controllers
     [Route("api/[controller]")]
     public class CampaignController : Controller
     {
-        private ICampaignStorage CampaignStorage { get; }
+        private ApiConfiguration ApiConfiguration { get; set; }
         private HubConnection HubConnection { get; }
+        private ICampaignStorage CampaignStorage { get; }
+        private ICampaignDatabase CampaignDatabase { get; }
 
         public CampaignController(
+            ApiConfiguration apiConfiguration,
             HubConnection hubConnection,
-            ICampaignStorage campaignStorage)
+            ICampaignStorage campaignStorage,
+            ICampaignDatabase campaignDatabase)
         {
-            CampaignStorage = campaignStorage;
+            ApiConfiguration = apiConfiguration;
             HubConnection = hubConnection;
+            CampaignStorage = campaignStorage;
+            CampaignDatabase = campaignDatabase;
         }
 
         /// <summary>
@@ -42,12 +51,11 @@ namespace MapBanana.Api.Controllers
                 return BadRequest("Campaign name cannot be null or whitespace.");
             }
 
-            await Task.Yield();
+            Guid campaignId = Guid.NewGuid();
+            string userId = User.GetBananaId(ApiConfiguration);
+            CampaignModel campaignModel = await CampaignDatabase.CreateCampaignAsync(userId, campaignId, name);
 
-            return Ok(new CampaignModel()
-            {
-                Name = name
-            });
+            return Ok(campaignModel);
         }
 
         /// <summary>

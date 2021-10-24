@@ -14,10 +14,14 @@ namespace MapBanana.Api.Controllers
     public class MapController : Controller
     {
         private ICampaignStorage CampaignStorage { get; }
+        private ICampaignDatabase CampaignDatabase { get; }
 
-        public MapController(ICampaignStorage campaignStorage)
+        public MapController(
+            ICampaignStorage campaignStorage,
+            ICampaignDatabase campaignDatabase)
         {
             CampaignStorage = campaignStorage;
+            CampaignDatabase = campaignDatabase;
         }
 
         [HttpGet]
@@ -26,8 +30,7 @@ namespace MapBanana.Api.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Get([FromRoute] Guid mapId)
         {
-            AzureSqlCampaignDatabase db = new AzureSqlCampaignDatabase();
-            MapResponseModel map = await db.GetMapAsync(mapId);
+            MapResponseModel map = await CampaignDatabase.GetMapAsync(mapId);
 
             return await Task.FromResult(Ok(map));
         }
