@@ -166,7 +166,7 @@ namespace MapBanana.API.ICampaignDatabase
             SqlDataReader reader = await command.ExecuteReaderAsync();
         }
 
-        public async Task<MapResponseModel> GetCampaignActiveMap(string userId, Guid campaignId)
+        public async Task<MapResponseModel> GetCampaignActiveMap(Guid campaignId)
         {
             const string COMMAND_NAME = "GetCampaignActiveMap";
 

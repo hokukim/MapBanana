@@ -167,10 +167,14 @@ namespace MapBanana.Api.Controllers
         [Route("{campaignId}/[action]")]
         public async Task<IActionResult> ActiveMap([FromRoute] Guid campaignId)
         {
+            MapResponseModel map = await CampaignDatabase.GetCampaignActiveMapAsync(campaignId);
 
-            await Task.Yield();
+            if (map == null)
+            {
+                return NotFound();
+            }
 
-            return Ok(new MapResponseModel());
+            return Ok(map);
         }
 
         /// <summary>
@@ -183,6 +187,10 @@ namespace MapBanana.Api.Controllers
         [Route("{campaignId}/[action]")]
         public async Task<IActionResult> ActiveMap([FromRoute] Guid campaignId, [FromBody] Guid mapId)
         {
+            string userId = User.GetBananaId(ApiConfiguration);
+
+            await CampaignDatabase.SetCampaignActiveMap(userId, campaignId, mapId);
+
             // Notify listeners that a map has been activated.
             await HubConnection.SendAsync(CampaignEvent.MapActive);
 

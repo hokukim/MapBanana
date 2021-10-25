@@ -15,12 +15,10 @@ namespace MapBanana.API.ICampaignDatabase
         Task<MapResponseModel> GetMapAsync(Guid mapId);
         Task DeleteMapAsync(string userId, Guid mapId);
         Task<MapResponseModel> AddCampaignMapAsync(string userId, MapResponseModel map);
-        Task SetCampaignActiveMap(string userId, Guid campaignId, Guid mapId);
-        Task<MapResponseModel> GetCampaignActiveMap(string userId, Guid campaignId);
         Task<List<MapResponseModel>> GetCampaignMapsAsync(string userId, Guid campaignId);
         Task DeleteCampaignMapsAsync(string userId, Guid campaignId);
 
         Task<MapResponseModel> GetCampaignActiveMapAsync(Guid campaignId);
-        Task<MapResponseModel> SetCampaignActiveMapAsync(string userId, Guid campaignId, Guid mapId);
+        Task SetCampaignActiveMap(string userId, Guid campaignId, Guid mapId);
     }
 }
