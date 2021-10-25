@@ -150,9 +150,10 @@ namespace MapBanana.API.ICampaignDatabase
             // Read results.
             return await reader.GetMapResponseModelAsync();
         }
-        public async Task SetCampaignActiveMap(string userId, Guid campaignId, Guid mapId)
+
+        public async Task<List<MapResponseModel>> GetCampaignMapsAsync(string userId, Guid campaignId)
         {
-            const string COMMAND_NAME = "SetCampaignActiveMap";
+            const string COMMAND_NAME = "GetCampaignMaps";
 
             using SqlConnection sqlConnection = new SqlConnection(ApiConfiguration.DatabaseConnectionString);
             await sqlConnection.OpenAsync();
@@ -160,38 +161,6 @@ namespace MapBanana.API.ICampaignDatabase
             using SqlCommand command = new SqlCommand(COMMAND_NAME, sqlConnection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
-            command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
-            command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, mapId));
-
-            SqlDataReader reader = await command.ExecuteReaderAsync();
-        }
-
-        public async Task<MapResponseModel> GetCampaignActiveMap(Guid campaignId)
-        {
-            const string COMMAND_NAME = "GetCampaignActiveMap";
-
-            using SqlConnection sqlConnection = new SqlConnection(ApiConfiguration.DatabaseConnectionString);
-            await sqlConnection.OpenAsync();
-
-            using SqlCommand command = new SqlCommand(COMMAND_NAME, sqlConnection);
-            command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
-
-            SqlDataReader reader = await command.ExecuteReaderAsync();
-
-            // Read results.
-            return await reader.GetMapResponseModelAsync();
-        }
-
-        public async Task<List<MapResponseModel>> GetCampaignMapsAsync(string userId, Guid campaignId)
-        {
-            const string COMMAND_NAME = "AddCampaignMap";
-
-            using SqlConnection sqlConnection = new SqlConnection(ApiConfiguration.DatabaseConnectionString);
-            await sqlConnection.OpenAsync();
-
-            using SqlCommand command = new SqlCommand(COMMAND_NAME, sqlConnection);
-            command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();

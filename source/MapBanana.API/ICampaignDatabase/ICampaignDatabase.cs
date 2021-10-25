@@ -19,6 +19,6 @@ namespace MapBanana.API.ICampaignDatabase
         Task DeleteCampaignMapsAsync(string userId, Guid campaignId);
 
         Task<MapResponseModel> GetCampaignActiveMapAsync(Guid campaignId);
-        Task SetCampaignActiveMap(string userId, Guid campaignId, Guid mapId);
+        Task<MapResponseModel> SetCampaignActiveMapAsync(string userId, Guid campaignId, Guid mapId);
     }
 }

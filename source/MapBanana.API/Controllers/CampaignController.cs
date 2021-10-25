@@ -189,7 +189,7 @@ namespace MapBanana.Api.Controllers
         {
             string userId = User.GetBananaId(ApiConfiguration);
 
-            await CampaignDatabase.SetCampaignActiveMap(userId, campaignId, mapId);
+            await CampaignDatabase.SetCampaignActiveMapAsync(userId, campaignId, mapId);
 
             // Notify listeners that a map has been activated.
             await HubConnection.SendAsync(CampaignEvent.MapActive);
