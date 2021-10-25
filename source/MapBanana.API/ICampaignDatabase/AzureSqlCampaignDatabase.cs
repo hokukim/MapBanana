@@ -87,7 +87,7 @@ namespace MapBanana.API.ICampaignDatabase
             using SqlCommand command = new SqlCommand(COMMAND_NAME, sqlConnection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
-            command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, campaignId));
+            command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
