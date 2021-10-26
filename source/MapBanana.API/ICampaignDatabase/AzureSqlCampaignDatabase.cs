@@ -235,10 +235,10 @@ namespace MapBanana.API.ICampaignDatabase
         {
             public const string USER_ID = "UserId";
 
-            public const string CAMPAIGN_ID = "Id";
+            public const string CAMPAIGN_ID = "CampaignId";
             public const string CAMPAIGN_NAME = "Name";
 
-            public const string MAP_ID = "Id";
+            public const string MAP_ID = "MapId";
             public const string MAP_NAME = "Name";
             public const string MAP_IMAGE_URL = "ImageUrl";
             public const string MAP_IMAGE_SMALL_URL = "ImageSmallUrl";
