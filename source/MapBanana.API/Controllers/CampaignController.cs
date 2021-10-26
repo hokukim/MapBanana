@@ -107,7 +107,7 @@ namespace MapBanana.Api.Controllers
             string userId = User.GetBananaId(ApiConfiguration);
 
             await Task.WhenAll(
-                CampaignDatabase.DeleteCampaignMapsAsync(userId, campaignId),
+                CampaignDatabase.DeleteCampaignAsync(userId, campaignId),
                 CampaignStorage.DeleteCampaignAsync(campaignId)
             );
 
@@ -126,9 +126,21 @@ namespace MapBanana.Api.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> Maps([FromRoute] Guid campaignId)
         {
-            await Task.Yield();
+            if (campaignId == Guid.Empty)
+            {
+                return BadRequest($"Campaign ID cannot be empty.");
+            }
 
-            return Ok(new List<MapResponseModel>());
+            string userId = User.GetBananaId(ApiConfiguration);
+
+            List<MapResponseModel> maps = await CampaignDatabase.GetCampaignMapsAsync(userId, campaignId);
+
+            if (maps == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(maps);
         }
 
         /// <summary>

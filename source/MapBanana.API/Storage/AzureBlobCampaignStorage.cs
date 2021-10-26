@@ -1,7 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using MapBanana.Api.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,7 +77,8 @@ namespace MapBanana.API.Storage
         public async Task DeleteCampaignAsync(Guid campaignId)
         {
             string campaignUrl = GetCampaignUrl(campaignId);
-            await BlobContainerClient.DeleteBlobAsync(campaignUrl);
+
+            await BlobContainerClient.DeleteBlobIfExistsAsync(campaignUrl);
         }
 
         private string GetMapUrl(Guid campaignId, Guid mapId, bool small = false)

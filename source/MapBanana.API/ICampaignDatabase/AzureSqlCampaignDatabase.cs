@@ -29,10 +29,11 @@ namespace MapBanana.API.ICampaignDatabase
             using SqlCommand command = new SqlCommand(COMMAND_NAME, sqlConnection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
-            command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_NAME, campaignId));
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
+            command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_NAME, campaignName));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
+            await reader.ReadAsync();
             
             return await reader.GetCampaignModelAsync();
         }
@@ -49,6 +50,7 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
+            await reader.ReadAsync();
 
             return await reader.GetCampaignModelsAsync();
         }
@@ -66,6 +68,7 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
+            await reader.ReadAsync();
 
             return await reader.GetCampaignModelAsync();
         }
@@ -89,7 +92,7 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
-            SqlDataReader reader = await command.ExecuteReaderAsync();
+            await command.ExecuteNonQueryAsync();
 
             return;
         }
@@ -108,6 +111,7 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, mapId));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
+            await reader.ReadAsync();
 
             // Read results.
             return await reader.GetMapResponseModelAsync();
@@ -146,6 +150,7 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_IMAGE_URL, map.ImageSmallUrl));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
+            await reader.ReadAsync();
 
             // Read results.
             return await reader.GetMapResponseModelAsync();
@@ -164,6 +169,7 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
+            await reader.ReadAsync();
 
             // Read results.
             return await reader.GetMapResponseModelsAsync();
@@ -174,10 +180,12 @@ namespace MapBanana.API.ICampaignDatabase
             const string COMMAND_NAME = "DeleteCampaignMaps";
 
             using SqlConnection sqlConnection = new SqlConnection(ApiConfiguration.DatabaseConnectionString);
+            await sqlConnection.OpenAsync();
+
             using SqlCommand command = new SqlCommand(COMMAND_NAME, sqlConnection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
-            command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, campaignId));
+            command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
 
