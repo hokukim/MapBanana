@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GmComponent } from './gm.component';
+import { GlComponent } from './gl.component';
 
 describe('GmComponent', () => {
-  let component: GmComponent;
-  let fixture: ComponentFixture<GmComponent>;
+  let component: GlComponent;
+  let fixture: ComponentFixture<GlComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GmComponent ]
+      declarations: [ GlComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GmComponent);
+    fixture = TestBed.createComponent(GlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -5,13 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { GmComponent } from './gm/gm.component';
+import { GlComponent } from './gl/gl.component';
 import { PlayerComponent } from './player/player.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GmComponent,
+    GlComponent,
     PlayerComponent
   ],
   imports: [

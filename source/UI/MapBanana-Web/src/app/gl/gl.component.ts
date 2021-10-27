@@ -3,15 +3,15 @@ import * as signalR from '@microsoft/signalr';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'app-gm',
-  templateUrl: './gm.component.html',
-  styleUrls: ['./gm.component.scss'],
+  selector: 'app-gl',
+  templateUrl: './gl.component.html',
+  styleUrls: ['./gl.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GmComponent implements OnInit {
+export class GlComponent implements OnInit {
 
   constructor(
-    private httpClient: HttpClient,) {
+    private httpClient: HttpClient) {
 
     httpClient.get('https://localhost:5001/api/campaign/campaigns').subscribe(response => {
       console.log(response);

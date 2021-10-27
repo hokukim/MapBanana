@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { GmComponent } from './gm/gm.component';
+import { GlComponent } from './gl/gl.component';
 import { PlayerComponent } from './player/player.component';
 
 const routes: Routes = [
-  { path: "gm", component: GmComponent},
+  { path: "gl", component: GlComponent},
   { path: "player", component: PlayerComponent}
 ];
 
