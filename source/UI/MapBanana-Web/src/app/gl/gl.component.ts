@@ -1,5 +1,4 @@
 import { HttpClient } from '@angular/common/http';
-import * as signalR from '@microsoft/signalr';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
