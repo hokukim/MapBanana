@@ -1,4 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CampaignHubService } from '../services/campaign-hub.service';
 
 @Component({
   selector: 'app-player',
@@ -8,9 +10,20 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 })
 export class PlayerComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private campaignHubService: CampaignHubService) { }
 
   ngOnInit(): void {
-  }
+    this.route.queryParams.subscribe(params => {
+      const campaignId: string = params['campaignId'];
 
+      if (campaignId === undefined)
+      {
+        return;
+      }
+
+      this.campaignHubService.connect(campaignId);
+    });
+  }
 }

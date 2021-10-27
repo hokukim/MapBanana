@@ -1,3 +1,5 @@
+import { HttpClient } from '@angular/common/http';
+import * as signalR from '@microsoft/signalr';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
@@ -8,9 +10,14 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 })
 export class GmComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private httpClient: HttpClient,) {
+
+    httpClient.get('https://localhost:5001/api/campaign/campaigns').subscribe(response => {
+      console.log(response);
+    });
+  }
 
   ngOnInit(): void {
   }
-
 }
