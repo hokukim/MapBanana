@@ -15,11 +15,11 @@ namespace MapBanana.EventHub.Hubs
             await Clients.Others.SendAsync(CampaignEvent.Joined);
         }
 
-        public async Task MapActive()
+        public async Task MapActive(Guid campaignId)
         {
             Console.WriteLine($"Campaign map activated.");
 
-            await Clients.Others.SendAsync(CampaignEvent.MapActive);
+            await Clients.Group(campaignId.ToString()).SendAsync(CampaignEvent.MapActive);
         }
     }
 }
