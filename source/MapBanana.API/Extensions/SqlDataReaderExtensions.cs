@@ -26,14 +26,11 @@ namespace MapBanana.API.Extensions
         {
             if (!reader.HasRows)
             {
-                return new List<CampaignModel>();
+                return new();
             }
 
             // Read results.
-            List<CampaignModel> campaigns = new List<CampaignModel>()
-            {
-                await reader.GetCampaignModelAsync()
-            };
+            List<CampaignModel> campaigns = new();
 
             while (await reader.ReadAsync())
             {

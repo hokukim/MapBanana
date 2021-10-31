@@ -50,7 +50,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.USER_ID, userId));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
-            await reader.ReadAsync();
 
             return await reader.GetCampaignModelsAsync();
         }

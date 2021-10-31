@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 
 import { GlComponent } from './gl/gl.component';
 import { PlayerComponent } from './player/player.component';
+import { StoreModule } from '@ngrx/store';
+import { campaignsReducer } from './store/campaigns/campaigns.reducer';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,10 @@ import { PlayerComponent } from './player/player.component';
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    StoreModule.forRoot({
+      campaigns: campaignsReducer
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -13,9 +13,9 @@
         Campaigns
       </h1>
       <ul>
-        <li>one</li>
-        <li>two</li>
-        <li>three</li>
+        <li *ngFor='let campaign of (campaigns$ | async)'>
+          {{campaign.name}}
+        </li>
       </ul>
     </div>
   </section>

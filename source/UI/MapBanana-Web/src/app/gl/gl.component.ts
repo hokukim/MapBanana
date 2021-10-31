@@ -1,5 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { BananaHubService } from '../services/banana-api.service';
+import { ICampaign } from '../store/campaigns/campaigns.model';
+import { selectCampaigns } from '../store/campaigns/campaigns.selector';
+import { getCampaigns } from '../store/campaigns/campaigns.actions';
+import { IAppState } from '../app.state';
 
 @Component({
   selector: 'app-gl',
@@ -8,13 +14,12 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GlComponent implements OnInit {
+  campaigns$ = this.store.select(selectCampaigns);
 
   constructor(
-    private httpClient: HttpClient) {
-
-    httpClient.get('https://localhost:5001/api/campaign/campaigns').subscribe(response => {
-      console.log(response);
-    });
+    private store: Store<IAppState>,
+    private bananaHubService: BananaHubService) {
+      bananaHubService.getCampaigns();
   }
 
   ngOnInit(): void {

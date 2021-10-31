@@ -42,19 +42,22 @@ namespace MapBanana.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Route("[action]")]
+        [Route("")]
         [ProducesResponseType(typeof(CampaignModel), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create([FromBody] string name)
+        public async Task<IActionResult> Create([FromBody] CreateCampaignRequestModel model)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(model?.Name))
             {
                 return BadRequest("Campaign name cannot be null or whitespace.");
             }
 
             Guid campaignId = Guid.NewGuid();
             string userId = User.GetBananaId(ApiConfiguration);
-            CampaignModel campaignModel = await CampaignDatabase.CreateCampaignAsync(userId, campaignId, name);
+            CampaignModel campaignModel = await CampaignDatabase.CreateCampaignAsync(userId, campaignId, model.Name);
+
+            // Notify listeners that a campaign has been created.
+            await HubConnection.SendAsync(CampaignEvent.CampaignCreated, campaignId);
 
             return Ok(campaignModel);
         }
@@ -90,9 +93,12 @@ namespace MapBanana.Api.Controllers
         {
             string userId = User.GetBananaId(ApiConfiguration);
 
-            List<CampaignModel> campaigns = await CampaignDatabase.GetCampaignsAsync(userId);
+            return Ok(await CampaignDatabase.GetCampaignsAsync(userId));
+        }
 
-            return Ok(campaigns);
+        public class Res
+        {
+            public Dictionary<Guid, CampaignModel> D;
         }
 
         [HttpPost]
