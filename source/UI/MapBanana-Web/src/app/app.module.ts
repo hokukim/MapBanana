@@ -10,6 +10,7 @@ import { PlayerComponent } from './player/player.component';
 import { StoreModule } from '@ngrx/store';
 import { campaignsReducer } from './store/campaigns/campaigns.reducer';
 import { CampaignComponent } from './campaign/campaign.component';
+import { mapsReducer } from './store/maps/maps.reducer';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CampaignComponent } from './campaign/campaign.component';
     HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot({
-      campaigns: campaignsReducer
+      campaigns: campaignsReducer,
+      maps: mapsReducer
     })
   ],
   providers: [],

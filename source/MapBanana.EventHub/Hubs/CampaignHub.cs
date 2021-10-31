@@ -19,7 +19,14 @@ namespace MapBanana.EventHub.Hubs
         {
             Console.WriteLine($"Campaign map activated.");
 
-            await Clients.Group(campaignId.ToString()).SendAsync(CampaignEvent.MapActive);
+            await Clients.Group(campaignId.ToString()).SendAsync(CampaignEvent.MapActive, campaignId);
+        }
+
+        public async Task MapAdded(Guid campaignId)
+        {
+            Console.WriteLine($"Campaign map added.");
+
+            await Clients.Group(campaignId.ToString()).SendAsync(CampaignEvent.MapAdded, campaignId);
         }
     }
 }

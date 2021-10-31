@@ -39,13 +39,21 @@ namespace MapBanana.API.Storage
 
         public async Task<MapResponseModel> SetMapAsync(Guid campaignId, Guid mapId, Stream dataStream)
         {
+            using Stream dataSmallStream = new MemoryStream();
+
+            dataStream.Position = 0;
+            await dataStream.CopyToAsync(dataSmallStream);
+
+            dataStream.Position = 0;
+            dataSmallStream.Position = 0;
+
             // Upload.
             string imageUrl = GetMapUrl(campaignId, mapId);
             string imageSmallUrl = GetMapUrl(campaignId, mapId, true);
 
             await Task.WhenAll(
                 BlobContainerClient.UploadBlobAsync(imageUrl, dataStream),
-                BlobContainerClient.UploadBlobAsync(imageSmallUrl, dataStream)
+                BlobContainerClient.UploadBlobAsync(imageSmallUrl, dataSmallStream)
             );
 
             // Build model.

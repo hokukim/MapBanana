@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { stringify } from 'querystring';
+import { BananaApiService } from './banana-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ export class CampaignHubService {
   private hubConnection: HubConnection;
   private campaignHubUrl: string = 'https://localhost:6001/campaignHub';
 
-  constructor() {
+  constructor(private bananaApiService: BananaApiService) {
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(this.campaignHubUrl)
       .withAutomaticReconnect()
@@ -29,6 +31,15 @@ export class CampaignHubService {
       })
       .catch(error => console.log(`Error connecting to campaign ${campaignId}: ${error}`));
 
+    this.hubConnection.on('MapAdded', (campaignId: string) => 
+    {
+      // Get maps.
+      this.bananaApiService.getMaps(campaignId);
+
+      // Write to store.
+      //
+    });
+    
     this.hubConnection.on('MapActive', () => 
     {
       console.log('Campaign message: Map activated')

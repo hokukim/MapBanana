@@ -10,6 +10,7 @@ using MapBanana.API.ICampaignDatabase;
 using MapBanana.API.Storage;
 using MapBanana.Core.Events;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -127,7 +128,7 @@ namespace MapBanana.Api.Controllers
         /// <returns>List of maps.</returns>
         [HttpGet]
         [Route("{campaignId}/[action]")]
-        [ProducesResponseType(typeof(MapModel), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Dictionary<Guid, MapResponseModel>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> Maps([FromRoute] Guid campaignId)
@@ -139,7 +140,7 @@ namespace MapBanana.Api.Controllers
 
             string userId = User.GetBananaId(ApiConfiguration);
 
-            List<MapResponseModel> maps = await CampaignDatabase.GetCampaignMapsAsync(userId, campaignId);
+            Dictionary<Guid, MapResponseModel> maps = await CampaignDatabase.GetCampaignMapsAsync(userId, campaignId);
 
             if (maps == null)
             {
@@ -159,19 +160,25 @@ namespace MapBanana.Api.Controllers
         [ProducesResponseType(typeof(MapModel), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> Map([FromRoute] Guid campaignId, [FromBody] MapRequestModel mapRequest)
+        public async Task<IActionResult> Map([FromRoute] Guid campaignId)
         {
             string userId = User.GetBananaId(ApiConfiguration);
             Guid mapId = Guid.NewGuid();
 
+            // File.
+            IFormFile file = Request.Form.Files[0];
+
             // Storage.
             using Stream stream = new MemoryStream();
-            await mapRequest.FormFile.CopyToAsync(stream);
+            await file.CopyToAsync(stream);
             MapResponseModel mapResponseModel = await CampaignStorage.SetMapAsync(campaignId, mapId, stream);
-            mapResponseModel.Name = mapRequest.Name;
+            mapResponseModel.Name = file.FileName;
 
             // Database.
             await CampaignDatabase.AddCampaignMapAsync(userId, mapResponseModel);
+
+            // Notify listeners that a campaign has been created.
+            await HubConnection.SendAsync(CampaignEvent.MapAdded, campaignId);
 
             return Ok(mapResponseModel);
         }

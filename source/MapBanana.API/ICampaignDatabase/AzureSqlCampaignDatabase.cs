@@ -146,16 +146,15 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, map.CampaignId));
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, map.Id));
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_IMAGE_URL, map.ImageUrl));
-            command.Parameters.Add(new SqlParameter(ParameterName.MAP_IMAGE_URL, map.ImageSmallUrl));
+            command.Parameters.Add(new SqlParameter(ParameterName.MAP_IMAGE_SMALL_URL, map.ImageSmallUrl));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
-            await reader.ReadAsync();
 
             // Read results.
             return await reader.GetMapResponseModelAsync();
         }
 
-        public async Task<List<MapResponseModel>> GetCampaignMapsAsync(string userId, Guid campaignId)
+        public async Task<Dictionary<Guid, MapResponseModel>> GetCampaignMapsAsync(string userId, Guid campaignId)
         {
             const string COMMAND_NAME = "GetCampaignMaps";
 
@@ -168,7 +167,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.CAMPAIGN_ID, campaignId));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
-            await reader.ReadAsync();
 
             // Read results.
             return await reader.GetMapResponseModelsAsync();

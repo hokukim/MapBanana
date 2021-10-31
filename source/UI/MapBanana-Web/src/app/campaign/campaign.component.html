@@ -9,14 +9,41 @@
   <body>
   <section class="section">
     <div class="container">
-      <h1 class="title">
-        Maps
-      </h1>
-      <ul>
-        <!-- <li *ngFor="let campaign of (campaigns$ | async) | keyvalue">
-          <a href="campaign/{{campaign.value.id}}">{{campaign.value.name}}</a>
-        </li> -->
-      </ul>
+        <h1 class="title">
+            Maps
+        </h1>
+        <div class="file has-name is-boxed">
+            <label class="file-label">
+                <input class="file-input" type="file" name="resume" (change)="onMapFile($event)">
+                <span class="file-cta">
+                    <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                        Choose a file…
+                    </span>
+                </span>
+                <span class="file-name"></span>
+            </label>
+        </div>
+        <div>
+            <button (click)="onAddMap()">Add map</button>
+        </div>
+        <div class="card" *ngFor="let map of (maps$ | async) | keyvalue">
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-128x128">
+                            <img src="{{map.value.imageSmallUrl}}" alt="{{map.value.name}}">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="title is-4">{{map.value.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <button (click)="onActivateMap(map.value.id)" >Activate</button>
+        </div>
     </div>
   </section>
   </body>

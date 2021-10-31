@@ -41,42 +41,47 @@ namespace MapBanana.API.Extensions
             return campaigns;
         }
 
-        public static Task<MapResponseModel> GetMapResponseModelAsync(this SqlDataReader reader)
+        public static async Task<MapResponseModel> GetMapResponseModelAsync(this SqlDataReader reader)
         {
             if (!reader.HasRows)
             {
                 return null;
             }
 
-            return Task.FromResult(new MapResponseModel()
+            await reader.ReadAsync();
+
+            return reader.ToMapResponseModel();
+        }
+
+        public static async Task<Dictionary<Guid, MapResponseModel>> GetMapResponseModelsAsync(this SqlDataReader reader)
+        {
+            if (!reader.HasRows)
+            {
+                return new();
+            }
+
+            // Read results.
+            Dictionary<Guid, MapResponseModel> maps = new();
+
+            while (await reader.ReadAsync())
+            {
+                MapResponseModel model = reader.ToMapResponseModel();
+                maps.Add(model.Id, model);
+            }
+
+            return maps;
+        }
+
+        private static MapResponseModel ToMapResponseModel(this SqlDataReader reader)
+        {
+            return new()
             {
                 Id = (Guid)reader[nameof(MapResponseModel.Id)],
                 CampaignId = (Guid)reader[nameof(MapResponseModel.CampaignId)],
                 Name = (string)reader[nameof(MapResponseModel.Name)],
                 ImageUrl = (string)reader[nameof(MapResponseModel.ImageUrl)],
                 ImageSmallUrl = (string)reader[nameof(MapResponseModel.ImageSmallUrl)]
-            });
-        }
-
-        public static async Task<List<MapResponseModel>> GetMapResponseModelsAsync(this SqlDataReader reader)
-        {
-            if (!reader.HasRows)
-            {
-                return new List<MapResponseModel>();
-            }
-
-            // Read results.
-            List<MapResponseModel> maps = new List<MapResponseModel>()
-            {
-                await reader.GetMapResponseModelAsync()
             };
-
-            while (await reader.ReadAsync())
-            {
-                maps.Add(await reader.GetMapResponseModelAsync());
-            }
-
-            return maps;
         }
     }
 }

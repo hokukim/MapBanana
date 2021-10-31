@@ -4,7 +4,13 @@ import { IMap } from './maps.model';
 
 export const initialState: Map<string, IMap> = new Map<string, IMap>();
 
-export const campaignsReducer = createReducer(
+export const mapsReducer = createReducer(
     initialState,
-    on(MapsActions.getMaps, (state, { maps }) => maps)
+    on(MapsActions.getMaps, (state, { maps }) => maps),
+    on(MapsActions.setMaps, (state, { maps }) => {
+        console.log(maps);
+        state = maps
+
+        return state;
+    })
 );
