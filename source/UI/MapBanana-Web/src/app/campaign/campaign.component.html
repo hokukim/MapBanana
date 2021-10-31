@@ -10,12 +10,12 @@
   <section class="section">
     <div class="container">
       <h1 class="title">
-        Campaigns
+        Maps
       </h1>
       <ul>
-        <li *ngFor="let campaign of (campaigns$ | async) | keyvalue">
-          <a href="campaign?id={{campaign.value.id}}">{{campaign.value.name}}</a>
-        </li>
+        <!-- <li *ngFor="let campaign of (campaigns$ | async) | keyvalue">
+          <a href="campaign/{{campaign.value.id}}">{{campaign.value.name}}</a>
+        </li> -->
       </ul>
     </div>
   </section>

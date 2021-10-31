@@ -19,9 +19,9 @@ export class GlComponent implements OnInit {
   constructor(
     private store: Store<IAppState>,
     private bananaHubService: BananaHubService) {
-      bananaHubService.getCampaigns();
   }
 
   ngOnInit(): void {
+    this.bananaHubService.getCampaigns();
   }
 }

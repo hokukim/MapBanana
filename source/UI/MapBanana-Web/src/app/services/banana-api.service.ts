@@ -11,28 +11,35 @@ import { ICampaign } from "../store/campaigns/campaigns.model";
 })
 export class BananaHubService{
 
-    private bananaHubUrl: string = 'https://localhost:5001/api';
+    private bananaHubUrl: string = 'https://localhost:5001/api/campaign';
 
     public constructor(
         private httpClient: HttpClient,
         private store: Store) { }
 
     public getCampaigns(): void {
-        const url: string = `${this.bananaHubUrl}/campaign/campaigns`;
+        const url: string = `${this.bananaHubUrl}/campaigns`;
         this.httpClient.get<Map<string, ICampaign>>(url).subscribe(response => {
-            console.log(response);
             this.store.dispatch(setCampaigns({ campaigns: response }));
         });
     }
 
     public addCampaign(name: string): void {
-        const url: string = `${this.bananaHubUrl}/campaign`;
+        const url: string = `${this.bananaHubUrl}`;
 
         const data = {
             "Name": name
         };
 
         this.httpClient.post(url, data).subscribe(response => {
+            console.log(response);
+        });
+    }
+
+    public getMaps(campaignId: string): void {
+        const url: string = `${this.bananaHubUrl}/${campaignId}/maps`;
+
+        this.httpClient.get(url).subscribe(response => {
             console.log(response);
         });
     }

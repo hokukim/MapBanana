@@ -9,12 +9,14 @@ import { GlComponent } from './gl/gl.component';
 import { PlayerComponent } from './player/player.component';
 import { StoreModule } from '@ngrx/store';
 import { campaignsReducer } from './store/campaigns/campaigns.reducer';
+import { CampaignComponent } from './campaign/campaign.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GlComponent,
-    PlayerComponent
+    PlayerComponent,
+    CampaignComponent
   ],
   imports: [
     BrowserModule,
