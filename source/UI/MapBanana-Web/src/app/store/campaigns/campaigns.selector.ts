@@ -5,7 +5,7 @@ import { createSelector } from '@ngrx/store';
  
 export const selectCampaigns = createSelector(
     (state: IAppState) => state.campaigns,
-    (campaigns: Array<ICampaign>) => campaigns
+    (campaigns: Map<string, ICampaign>) => campaigns
 );
  
 // export const selectCampaign = (id: string) => createSelector(

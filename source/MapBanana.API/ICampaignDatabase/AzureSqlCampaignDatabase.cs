@@ -38,7 +38,7 @@ namespace MapBanana.API.ICampaignDatabase
             return await reader.GetCampaignModelAsync();
         }
 
-        public async Task<List<CampaignModel>> GetCampaignsAsync(string userId)
+        public async Task<Dictionary<Guid, CampaignModel>> GetCampaignsAsync(string userId)
         {
             const string COMMAND_NAME = "GetCampaigns";
 

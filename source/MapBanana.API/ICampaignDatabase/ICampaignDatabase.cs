@@ -7,7 +7,7 @@ namespace MapBanana.API.ICampaignDatabase
 {
     public interface ICampaignDatabase
     {
-        Task<List<CampaignModel>> GetCampaignsAsync(string userId);
+        Task<Dictionary<Guid, CampaignModel>> GetCampaignsAsync(string userId);
         Task<CampaignModel> GetCampaignAsync(string userId, Guid campaignId);
         Task<CampaignModel> CreateCampaignAsync(string userId, Guid campaignId, string campaignName);
         Task DeleteCampaignAsync(string userId, Guid campaignId);

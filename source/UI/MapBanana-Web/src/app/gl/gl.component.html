@@ -13,8 +13,8 @@
         Campaigns
       </h1>
       <ul>
-        <li *ngFor='let campaign of (campaigns$ | async)'>
-          {{campaign.name}}
+        <li *ngFor="let campaign of (campaigns$ | async) | keyvalue">
+          {{campaign.value.name}}
         </li>
       </ul>
     </div>

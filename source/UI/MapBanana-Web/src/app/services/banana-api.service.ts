@@ -19,7 +19,7 @@ export class BananaHubService{
 
     public getCampaigns(): void {
         const url: string = `${this.bananaHubUrl}/campaign/campaigns`;
-        this.httpClient.get<Array<ICampaign>>(url).subscribe(response => {
+        this.httpClient.get<Map<string, ICampaign>>(url).subscribe(response => {
             console.log(response);
             this.store.dispatch(setCampaigns({ campaigns: response }));
         });

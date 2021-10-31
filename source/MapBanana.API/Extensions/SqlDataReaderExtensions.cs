@@ -22,7 +22,7 @@ namespace MapBanana.API.Extensions
             });
         }
 
-        public static async Task<List<CampaignModel>> GetCampaignModelsAsync(this SqlDataReader reader)
+        public static async Task<Dictionary<Guid, CampaignModel>> GetCampaignModelsAsync(this SqlDataReader reader)
         {
             if (!reader.HasRows)
             {
@@ -30,11 +30,12 @@ namespace MapBanana.API.Extensions
             }
 
             // Read results.
-            List<CampaignModel> campaigns = new();
+            Dictionary<Guid, CampaignModel> campaigns = new();
 
             while (await reader.ReadAsync())
             {
-                campaigns.Add(await reader.GetCampaignModelAsync());
+                CampaignModel campaign = await reader.GetCampaignModelAsync();
+                campaigns.Add(campaign.Id, campaign);
             }
 
             return campaigns;
