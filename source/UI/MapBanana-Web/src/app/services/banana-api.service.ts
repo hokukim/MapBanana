@@ -33,9 +33,7 @@ export class BananaApiService{
             "Name": name
         };
 
-        this.httpClient.post(url, data).subscribe(response => {
-            console.log(response);
-        });
+        this.httpClient.post(url, data).subscribe();
     }
 
     public getMaps(campaignId: string): void {

@@ -10,8 +10,5 @@ export const initialState: ICampaign = {
 
 export const campaignReducer = createReducer(
     initialState,
-    on(CampaignActions.setCampaign, (state, { campaign }) => {
-        console.log(campaign);
-        return campaign;
-    })
+    on(CampaignActions.setCampaign, (state, { campaign }) => campaign )
 );

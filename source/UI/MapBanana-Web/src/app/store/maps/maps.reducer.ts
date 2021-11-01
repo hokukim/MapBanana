@@ -6,10 +6,5 @@ export const initialState: Map<string, IMap> = new Map<string, IMap>();
 
 export const mapsReducer = createReducer(
     initialState,
-    on(MapsActions.setMaps, (state, { maps }) => {
-        console.log(maps);
-        state = maps
-
-        return state;
-    })
+    on(MapsActions.setMaps, (state, { maps }) => maps)
 );
