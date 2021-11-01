@@ -110,7 +110,6 @@ namespace MapBanana.API.ICampaignDatabase
             command.Parameters.Add(new SqlParameter(ParameterName.MAP_ID, mapId));
 
             SqlDataReader reader = await command.ExecuteReaderAsync();
-            await reader.ReadAsync();
 
             // Read results.
             return await reader.GetMapResponseModelAsync();

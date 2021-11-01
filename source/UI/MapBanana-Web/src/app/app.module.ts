@@ -12,6 +12,7 @@ import { campaignsReducer } from './store/campaigns/campaigns.reducer';
 import { CampaignComponent } from './campaign/campaign.component';
 import { mapsReducer } from './store/maps/maps.reducer';
 import { campaignReducer } from './store/campaign/campaign.reducer';
+import { mapReducer } from './store/map/map.reducer';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { campaignReducer } from './store/campaign/campaign.reducer';
     StoreModule.forRoot({
       campaigns: campaignsReducer,
       campaign: campaignReducer,
-      maps: mapsReducer
+      maps: mapsReducer,
+      map: mapReducer
     })
   ],
   providers: [],

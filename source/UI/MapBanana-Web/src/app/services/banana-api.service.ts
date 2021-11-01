@@ -4,6 +4,7 @@ import { Store } from "@ngrx/store";
 import { setCampaign } from "../store/campaign/campaign.actions";
 import { setCampaigns } from "../store/campaigns/campaigns.actions";
 import { ICampaign } from "../store/campaigns/campaigns.model";
+import { setMap } from "../store/map/map.actions";
 import { setMaps } from "../store/maps/maps.actions";
 import { IMap } from "../store/maps/maps.model";
 
@@ -13,21 +14,23 @@ import { IMap } from "../store/maps/maps.model";
 })
 export class BananaApiService{
 
-    private bananaHubUrl: string = 'https://localhost:5001/api/campaign';
+    private bananaHubUrl: string = 'https://localhost:5001/api';
+    private campaignUrl: string = `${this.bananaHubUrl}/campaign`;
+    private mapUrl: string = `${this.bananaHubUrl}/map`;
 
     public constructor(
         private httpClient: HttpClient,
         private store: Store) { }
 
     public getCampaigns(): void {
-        const url: string = `${this.bananaHubUrl}/campaigns`;
+        const url: string = `${this.campaignUrl}/campaigns`;
         this.httpClient.get<Map<string, ICampaign>>(url).subscribe(response => {
             this.store.dispatch(setCampaigns({ campaigns: response }));
         });
     }
 
     public addCampaign(name: string): void {
-        const url: string = `${this.bananaHubUrl}`;
+        const url: string = `${this.campaignUrl}`;
 
         const data = {
             "Name": name
@@ -37,7 +40,7 @@ export class BananaApiService{
     }
 
     public getMaps(campaignId: string): void {
-        const url: string = `${this.bananaHubUrl}/${campaignId}/maps`;
+        const url: string = `${this.campaignUrl}/${campaignId}/maps`;
 
         this.httpClient.get<Map<string, IMap>>(url).subscribe(response => {
             this.store.dispatch(setMaps({ maps: response }));
@@ -45,7 +48,7 @@ export class BananaApiService{
     }
 
     public addMap(campaignId: string, file: File) {
-        const url: string = `${this.bananaHubUrl}/${campaignId}/map`;
+        const url: string = `${this.campaignUrl}/${campaignId}/map`;
 
         const data: FormData = new FormData();
 
@@ -57,8 +60,16 @@ export class BananaApiService{
         this.httpClient.post<IMap>(url, data).subscribe();
     }
 
+    public getMap(mapId: string) {
+        const url: string = `${this.mapUrl}/${mapId}`;
+
+        this.httpClient.get<IMap>(url).subscribe(response => {
+            this.store.dispatch(setMap({ map: response }));
+        });
+    }
+
     public activateMap(campaignId: string, mapId: string) {
-        const url: string = `${this.bananaHubUrl}/${campaignId}/activeMap`;
+        const url: string = `${this.campaignUrl}/${campaignId}/activeMap`;
 
         const data = {
             "Id": mapId
@@ -68,7 +79,7 @@ export class BananaApiService{
     }
 
     public getCampaign(campaignId: string) {
-        const url: string = `${this.bananaHubUrl}/${campaignId}`;
+        const url: string = `${this.campaignUrl}/${campaignId}`;
 
         this.httpClient.get<ICampaign>(url).subscribe(response => {
             this.store.dispatch(setCampaign({ campaign: response }));

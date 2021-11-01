@@ -15,12 +15,19 @@ namespace MapBanana.API.Extensions
                 return null;
             }
 
-            return Task.FromResult(new CampaignModel()
+            CampaignModel model = (new()
             {
                 Id = (Guid)reader[nameof(CampaignModel.Id)],
-                Name = (string)reader[nameof(CampaignModel.Name)],
-                ActiveMapId = (Guid)reader[nameof(CampaignModel.ActiveMapId)]
+                Name = (string)reader[nameof(CampaignModel.Name)]
             });
+
+            object activeMapId = reader[nameof(CampaignModel.ActiveMapId)];
+            if (activeMapId is not DBNull)
+            {
+                model.ActiveMapId = (Guid)activeMapId;
+            }
+
+            return Task.FromResult(model);
         }
 
         public static async Task<Dictionary<Guid, CampaignModel>> GetCampaignModelsAsync(this SqlDataReader reader)

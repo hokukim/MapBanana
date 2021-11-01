@@ -5,4 +5,5 @@ export interface IAppState {
     campaigns: Map<string, ICampaign>;
     campaign: ICampaign;
     maps: Map<string, IMap>;
+    map: IMap;
 }

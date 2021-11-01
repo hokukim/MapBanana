@@ -7,3 +7,8 @@ export const selectMaps = createSelector(
     (state: IAppState) => state.maps,
     (maps: Map<string, IMap>) => maps      
 );
+
+export const selectMap = (mapId: string) => createSelector(
+    (state: IAppState) => state.maps,
+    (maps: Map<string, IMap>) => maps.get(mapId)
+);

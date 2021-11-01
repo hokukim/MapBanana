@@ -7,3 +7,8 @@ export const selectCampaign = createSelector(
     (state: IAppState) => state.campaign,
     (campaign: ICampaign) => campaign
 );
+
+export const selectActiveMapId = createSelector(
+    (state: IAppState) => state.campaign,
+    (campaign: ICampaign) => campaign.activeMapId
+);
