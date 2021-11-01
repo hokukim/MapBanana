@@ -18,7 +18,8 @@ namespace MapBanana.API.Extensions
             return Task.FromResult(new CampaignModel()
             {
                 Id = (Guid)reader[nameof(CampaignModel.Id)],
-                Name = (string)reader[nameof(CampaignModel.Name)]
+                Name = (string)reader[nameof(CampaignModel.Name)],
+                ActiveMapId = (Guid)reader[nameof(CampaignModel.ActiveMapId)]
             });
         }
 

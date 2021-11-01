@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { IAppState } from '../app.state';
 import { BananaApiService } from '../services/banana-api.service';
 import { CampaignHubService } from '../services/campaign-hub.service';
+import { selectCampaign } from '../store/campaign/campaign.selector';
 import { selectMaps } from '../store/maps/maps.selector';
 
 @Component({
@@ -14,6 +15,7 @@ import { selectMaps } from '../store/maps/maps.selector';
 export class CampaignComponent implements OnInit {
 
   public maps$ = this.store.select(selectMaps);
+  public campaign$ = this.store.select(selectCampaign);
   private file!: File;
   private campaignId!: string;
 
@@ -29,6 +31,7 @@ export class CampaignComponent implements OnInit {
       this.campaignId = params['id'];
       this.campaignHubService.connect(this.campaignId);
       this.bananaApiService.getMaps(this.campaignId);
+      this.bananaApiService.getCampaign(this.campaignId);
     });
   }
 
@@ -41,5 +44,6 @@ export class CampaignComponent implements OnInit {
   }
 
   onActivateMap( mapId: string) {
+    this.bananaApiService.activateMap(this.campaignId, mapId);
   }
 }

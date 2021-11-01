@@ -6,6 +6,5 @@ export const initialState: Map<string, ICampaign> = new Map<string, ICampaign>()
 
 export const campaignsReducer = createReducer(
     initialState,
-    on(CampaignActions.getCampaigns, (state, { campaigns }) => campaigns),
     on(CampaignActions.setCampaigns, (state, { campaigns }) => state = campaigns)
 );

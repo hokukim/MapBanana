@@ -11,6 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import { campaignsReducer } from './store/campaigns/campaigns.reducer';
 import { CampaignComponent } from './campaign/campaign.component';
 import { mapsReducer } from './store/maps/maps.reducer';
+import { campaignReducer } from './store/campaign/campaign.reducer';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { mapsReducer } from './store/maps/maps.reducer';
     AppRoutingModule,
     StoreModule.forRoot({
       campaigns: campaignsReducer,
+      campaign: campaignReducer,
       maps: mapsReducer
     })
   ],

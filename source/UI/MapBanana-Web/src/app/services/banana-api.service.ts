@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
+import { setCampaign } from "../store/campaign/campaign.actions";
 import { setCampaigns } from "../store/campaigns/campaigns.actions";
 import { ICampaign } from "../store/campaigns/campaigns.model";
 import { setMaps } from "../store/maps/maps.actions";
@@ -56,5 +57,23 @@ export class BananaApiService{
 
         data.append("file", file);
         this.httpClient.post<IMap>(url, data).subscribe();
+    }
+
+    public activateMap(campaignId: string, mapId: string) {
+        const url: string = `${this.bananaHubUrl}/${campaignId}/activeMap`;
+
+        const data = {
+            "Id": mapId
+        };
+
+        this.httpClient.post(url, data).subscribe();
+    }
+
+    public getCampaign(campaignId: string) {
+        const url: string = `${this.bananaHubUrl}/${campaignId}`;
+
+        this.httpClient.get<ICampaign>(url).subscribe(response => {
+            this.store.dispatch(setCampaign({ campaign: response }));
+        });        
     }
 }

@@ -210,16 +210,16 @@ namespace MapBanana.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("{campaignId}/[action]")]
-        public async Task<IActionResult> ActiveMap([FromRoute] Guid campaignId, [FromBody] Guid mapId)
+        public async Task<IActionResult> ActiveMap([FromRoute] Guid campaignId, [FromBody] MapModel model)
         {
             string userId = User.GetBananaId(ApiConfiguration);
 
-           // await CampaignDatabase.SetCampaignActiveMapAsync(userId, campaignId, mapId);
+            await CampaignDatabase.SetCampaignActiveMapAsync(userId, campaignId, model.Id);
 
             // Notify listeners that a map has been activated.
             await HubConnection.SendAsync(CampaignEvent.MapActive, campaignId);
 
-            return Ok(new MapResponseModel());
+            return Ok();
         }
     }
 }

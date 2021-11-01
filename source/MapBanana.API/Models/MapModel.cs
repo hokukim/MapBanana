@@ -3,11 +3,6 @@ using System;
 
 namespace MapBanana.Api.Models
 {
-    public class MapRequestModel : MapModel
-    {
-        public IFormFile FormFile { get; set; }
-    }
-
     public class MapResponseModel : MapModel
     {
         public string ImageUrl { get; set; }

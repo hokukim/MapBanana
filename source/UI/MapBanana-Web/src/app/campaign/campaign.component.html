@@ -42,7 +42,11 @@
                     </div>
                 </div>
             </div>
-            <button (click)="onActivateMap(map.value.id)" >Activate</button>
+            {{map.value.id}}
+            {{(campaign$ | async)}}
+            <div *ngIf="map.value.id != (campaign$ | async)?.activeMapId">
+                <button (click)="onActivateMap(map.value.id)">Activate</button>
+            </div>
         </div>
     </div>
   </section>

@@ -35,20 +35,11 @@ export class CampaignHubService {
     {
       // Get maps.
       this.bananaApiService.getMaps(campaignId);
-
-      // Write to store.
-      //
     });
     
-    this.hubConnection.on('MapActive', () => 
+    this.hubConnection.on('MapActive', (campaignId: string) => 
     {
-      console.log('Campaign message: Map activated')
-
-      // Get active map.
-      //
-
-      // Write to store.
-      //
+      this.bananaApiService.getCampaign(campaignId);
     });
   }
 }
