@@ -14,13 +14,28 @@
         </h1>
         <div class="file has-name is-boxed">
             <label class="file-label">
+              <input class="file-input" type="file" name="resume" (change)="onMapThumbnailFile($event)">
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Choose a thumbnail...
+                </span>
+              </span>
+              <span class="file-name">
+              </span>
+            </label>
+          </div>
+        <div class="file has-name is-boxed">
+            <label class="file-label">
                 <input class="file-input" type="file" name="resume" (change)="onMapFile($event)">
                 <span class="file-cta">
                     <span class="file-icon">
                         <i class="fas fa-upload"></i>
                     </span>
                     <span class="file-label">
-                        Choose a file…
+                        Choose an image...
                     </span>
                 </span>
                 <span class="file-name"></span>
@@ -42,8 +57,6 @@
                     </div>
                 </div>
             </div>
-            {{map.value.id}}
-            {{(campaign$ | async)}}
             <div *ngIf="map.value.id != (campaign$ | async)?.activeMapId">
                 <button (click)="onActivateMap(map.value.id)">Activate</button>
             </div>

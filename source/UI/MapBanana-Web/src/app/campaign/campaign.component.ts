@@ -16,6 +16,7 @@ export class CampaignComponent implements OnInit {
 
   public maps$ = this.store.select(selectMaps);
   public campaign$ = this.store.select(selectCampaign);
+  private smallFile!: File;
   private file!: File;
   private campaignId!: string;
 
@@ -35,12 +36,15 @@ export class CampaignComponent implements OnInit {
     });
   }
 
+  onMapThumbnailFile(event: any) {
+    this.smallFile = event.target.files[0];
+  }
   onMapFile(event: any) {
     this.file = event.target.files[0];
   }
 
   onAddMap() {
-    this.bananaApiService.addMap(this.campaignId, this.file);
+    this.bananaApiService.addMap(this.campaignId, this.file, this.smallFile);
   }
 
   onActivateMap( mapId: string) {

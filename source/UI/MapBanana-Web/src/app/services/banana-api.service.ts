@@ -47,16 +47,23 @@ export class BananaApiService{
         });
     }
 
-    public addMap(campaignId: string, file: File) {
+    public addMap(campaignId: string, file: File, smallFile: File) {
         const url: string = `${this.campaignUrl}/${campaignId}/map`;
 
         const data: FormData = new FormData();
 
+        // Add map image file.
         if (!file) {
             return;
         }
 
         data.append("file", file);
+
+        // Add map small image file.
+        if (smallFile) {
+            data.append("smallFile", smallFile);
+        }
+
         this.httpClient.post<IMap>(url, data).subscribe();
     }
 

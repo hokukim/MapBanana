@@ -37,13 +37,8 @@ namespace MapBanana.API.Storage
             return await Task.FromResult(mapResponseModel);
         }
 
-        public async Task<MapResponseModel> SetMapAsync(Guid campaignId, Guid mapId, Stream dataStream)
+        public async Task<MapResponseModel> SetMapAsync(Guid campaignId, Guid mapId, Stream dataStream, Stream dataSmallStream)
         {
-            using Stream dataSmallStream = new MemoryStream();
-
-            dataStream.Position = 0;
-            await dataStream.CopyToAsync(dataSmallStream);
-
             dataStream.Position = 0;
             dataSmallStream.Position = 0;
 

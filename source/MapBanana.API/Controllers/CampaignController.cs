@@ -166,12 +166,19 @@ namespace MapBanana.Api.Controllers
             Guid mapId = Guid.NewGuid();
 
             // File.
-            IFormFile file = Request.Form.Files[0];
+            IFormFile file = Request.Form.Files["file"];
+            IFormFile smallFile = Request.Form.Files["smallFile"];
 
             // Storage.
             using Stream stream = new MemoryStream();
-            await file.CopyToAsync(stream);
-            MapResponseModel mapResponseModel = await CampaignStorage.SetMapAsync(campaignId, mapId, stream);
+            using Stream smallStream = new MemoryStream();
+            
+            await Task.WhenAll(
+                file.CopyToAsync(stream),
+                smallFile.CopyToAsync(smallStream)
+            );
+
+            MapResponseModel mapResponseModel = await CampaignStorage.SetMapAsync(campaignId, mapId, stream, smallStream);
             mapResponseModel.Name = file.FileName;
 
             // Database.
